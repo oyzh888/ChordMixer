@@ -66,8 +66,6 @@ public class StdScore {
 		return volume;
 	}
 
-
-XCZ
 	public String scoreToStringNotes(){
 		String str = "";
 		for(StdNote tNote : musicTrack.get(0).noteTrack){
@@ -77,10 +75,25 @@ XCZ
 		return str.trim();//去掉前后空格
 	}
 
+	//        088 0 5 1 00
+//        100 1 6 1 00
+//
+//        name
+//                author
+//
+//        08805100 08805100 08805100
+//        C Dm Em C4 Cadd
 	public String scoreTo8BitsStringNotes(){
-		String str = "", placeholder = "999";
+		String str = "", placeholder = "00",seperator = " ";
 		for(StdNote tNote : musicTrack.get(0).noteTrack){
-			str +=  tNote.name + tNote.octave + 0 + (tNote.duration)  + placeholder + " " ;
+
+			str += String.format("%03d",tNote.absolutePosition)
+				+  tNote.downFlatSharp
+				+  tNote.octave
+				+  tNote.dot
+				+  placeholder
+				+  seperator;
+			//这里要这样写么？？
 			if(tNote.barPoint == 1) str += ',';
 		}
 		return str.trim();//去掉前后空格
@@ -101,7 +114,7 @@ XCZ
 		str += "numOfTrarck = " + musicTrack.size() + "\n";
 		str += "MainMelody:\n";
 		for(StdNote tmp : musicTrack.get(0).noteTrack){
-			str += tmp.name + tmp.absolutePosition /12 + tmp.duration + " ";
+			str += tmp.name + tmp.octave + tmp.duration + " ";
 		}
 		str += "\n";
 		str += "ChordTrack:\n";

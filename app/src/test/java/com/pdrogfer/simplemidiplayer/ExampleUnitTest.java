@@ -1,5 +1,6 @@
 package com.pdrogfer.simplemidiplayer;
 
+import android.provider.Settings;
 import android.widget.ImageView;
 import android.widget.QuickContactBadge;
 import android.widget.TextView;
@@ -27,44 +28,32 @@ import com.ftboys.*;
 */
 public class ExampleUnitTest {
 
-    ChordCalculator chordMixerCalculator = new ChordCalculator();
-    //界面音乐变量
+
+    //曲谱样例
     private StdScore mainScore = new StdScore();
-    private StdPattent mainPattent = new StdPattent();
 
-    private int mainInputDuration = 6;
-
-
-    TextView inputTextMain, textMainChord;
-
+    //音符序列
     private StdNote noteToAdd[] =  new StdNote[]{
-        QuickMusic.strToNote("C36"),  QuickMusic.strToNote("C36"),  QuickMusic.strToNote("C36"),  QuickMusic.strToNote("C36"),
+        QuickMusic.strToNote("E56"),  QuickMusic.strToNote("C35"),  QuickMusic.strToNote("C36"),  QuickMusic.strToNote("C36"),
             QuickMusic.strToNote("D36"),  QuickMusic.strToNote("C36"),  QuickMusic.strToNote("D36"),  QuickMusic.strToNote("C36"),
             QuickMusic.strToNote("C36")
     };
+    //以下测试会自动运行
     @Test
     public void addition_isCorrect() throws Exception {
         //assertEquals(3, 2 + 2);
 
-       System.out.println();
+        //把音符序列依次加入到score的第一轨中
        for(StdNote tmp : noteToAdd){
            mainScore.musicTrack.get(0).noteTrack.add(tmp);
        }
+        //添加两个和弦到和弦轨中
+        mainScore.chordTrack.add(new StdChord("C"));
+        mainScore.chordTrack.add(new StdChord("Dm"));
 
-        mainScore.musicTrack.get(1).trackPattent = 2 ;
-
-        mainScore = chordMixerCalculator.scoreHandler(mainScore);
-        mainScore = mainPattent.scoreChordHandler(mainScore);
-
-        String str = "";
-        for(StdNote tmp :mainScore.musicTrack.get(2).noteTrack){
-            str += tmp.name + tmp.octave + " ";
-        }
-        System.out.println(str);
-
+        System.out.println(mainScore.description());
+        System.out.println(mainScore.scoreTo8BitsStringNotes());
         System.out.println(mainScore.scoreToChord());
-
-
 
     }
 }
