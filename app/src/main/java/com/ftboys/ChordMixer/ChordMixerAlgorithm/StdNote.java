@@ -24,6 +24,7 @@ public class StdNote {
 	public String name;
 	public int barPoint = 0;
 	public int octave = 0;
+	public int downFlatSharp = 1;
 
 	private int biasForOctave = 2;
 	public StdNote(int pitch, int duration, int octave, int dot, String name) {
@@ -39,6 +40,12 @@ public class StdNote {
 		absolutePosition = pitch + (octave + biasForOctave) * 12;
 		this.octave = getOctave();
 		this.pitch = getPitch();
+
+		if(name.length() > 1){
+			if(name.charAt(1) == '#') downFlatSharp++;
+			else if(name.charAt(1) == 'b')downFlatSharp--;
+		}
+
 	}
 
 
