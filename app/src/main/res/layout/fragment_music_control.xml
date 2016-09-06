@@ -1,0 +1,119 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60sp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="135dp"
+                    android:layout_height="match_parent"
+                    android:text="音量"
+                    android:gravity="center"
+                    android:textSize="20sp"
+                    android:textColor="#121212"/>
+
+                <SeekBar
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:id="@+id/seekBar_volume"
+                    android:layout_marginRight="0dp"/>
+
+                <TextView
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="10dp"
+                    android:id="@+id/txtlinkto_seekBar_volume"
+                    android:text="0"
+                    android:textSize="16sp"
+                    android:gravity="center"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60sp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="135dp"
+                    android:layout_height="match_parent"
+                    android:text="速度"
+                    android:gravity="center"
+                    android:textSize="20sp"
+                    android:textColor="#121212"/>
+
+                <SeekBar
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:id="@+id/seekBar_speed"
+                    android:layout_marginRight="0dp"/>
+
+                <TextView
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="10dp"
+                    android:id="@+id/txtlinkto_seekBar_speed"
+                    android:text="0"
+                    android:textSize="16sp"
+                    android:gravity="center"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60sp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="135dp"
+                    android:layout_height="match_parent"
+                    android:text="移调"
+                    android:gravity="center"
+                    android:textSize="20sp"
+                    android:textColor="#121212"/>
+
+
+                <Button
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:text="-"
+                    android:background="@drawable/btn_key_style"
+                    android:id="@+id/button_leveldown" />
+
+                <TextView
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:text="G"
+                    android:textSize="18dp"
+                    android:gravity="center"
+                    android:id="@+id/txtlinkto_level"/>
+
+                <Button
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:text="+"
+                    android:background="@drawable/btn_key_style"
+                    android:id="@+id/button_levelup" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</FrameLayout>
