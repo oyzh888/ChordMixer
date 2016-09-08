@@ -1,21 +1,11 @@
-package com.pdrogfer.simplemidiplayer;
+package com.ftboys.ChordMixer;
 
-import android.provider.Settings;
-import android.widget.ImageView;
-import android.widget.QuickContactBadge;
-import android.widget.TextView;
-
-import com.ftboys.ChordMixer.ChordMixerAlgorithm.ChordCalculator;
 import com.ftboys.ChordMixer.ChordMixerAlgorithm.QuickMusic;
 import com.ftboys.ChordMixer.ChordMixerAlgorithm.StdChord;
 import com.ftboys.ChordMixer.ChordMixerAlgorithm.StdNote;
-import com.ftboys.ChordMixer.ChordMixerAlgorithm.StdPattent;
 import com.ftboys.ChordMixer.ChordMixerAlgorithm.StdScore;
 
 import org.junit.Test;
-
-import static org.junit.Assert.*;
-import com.ftboys.*;
 
 /**
  * To work on unit tests, switch the Test Artifact in the Build Variants view.
@@ -52,8 +42,19 @@ public class ExampleUnitTest {
         mainScore.chordTrack.add(new StdChord("Dm"));
 
         System.out.println(mainScore.description());
-        System.out.println(mainScore.scoreTo8BitsStringNotes());
-        System.out.println(mainScore.scoreToChord());
+
+        String str1 = mainScore.scoreToFileString();
+        str1 = "UnKnown$UnKnown$120$100$0$5$08416000 06015000 06016000 06016000 06016000 06016000 06016000 06016000 06016000$C Dm";
+
+        mainScore.initScore();
+        System.out.println(str1);
+        System.out.println("----------------------------");
+
+        StdScore newScore = mainScore.fileToScore(str1);
+        System.out.println(newScore.description());
+
+
+       // System.out.println(mainScore.scoreToChord());
 
     }
 }

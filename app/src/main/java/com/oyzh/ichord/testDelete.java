@@ -25,7 +25,7 @@
 //import android.widget.Toast;
 //
 //import com.ftboys.ChordMixer.ChordMixerAlgorithm.*;
-//import com.pdrogfer.simplemidiplayer.R;
+//import com.pdrogfer.ChordMixer.R;
 //
 //import com.ftboys.ChordMixer.*;
 //

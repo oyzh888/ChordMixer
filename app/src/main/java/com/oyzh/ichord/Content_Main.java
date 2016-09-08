@@ -1,14 +1,5 @@
 package com.oyzh.ichord;
 
-import android.os.Bundle;
-import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.Toast;
-
-import com.pdrogfer.simplemidiplayer.R;
-
 /**
  * Created by OYZH on 16/8/4.
  */

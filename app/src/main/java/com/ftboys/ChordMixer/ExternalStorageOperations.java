@@ -127,7 +127,7 @@ public class ExternalStorageOperations {
         //在存储上创建MIDI文件（*.mid）
         MidiFile newMidiNoteFile = new MidiFile(MidiFile.DEFAULT_RESOLUTION, tracks);
 
-        // File file = new File(ABSOLUTE_EXTERNAL_PATH, "note_c4.mid");
+        //File file = new File(ABSOLUTE_EXTERNAL_PATH, "note_c4.mid");
         //String pathToMidiNoteFile = MIDI_MUSIC_FILE + "/" +   "mynote.mid";
         final File output = new File(MIDI_MUSIC_FILE, "mynote.mid");
         try {

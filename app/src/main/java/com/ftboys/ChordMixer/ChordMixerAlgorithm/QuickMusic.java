@@ -11,11 +11,13 @@ public  class QuickMusic {
         String name = String.valueOf(str.charAt(0)) ;
         int octave = str.charAt(1) - '0' ;
         int duration = str.charAt(2) - '0';
+
         StdNote noteReturn = new StdNote(name);
 
         //biasForOctave = 2
         //noteReturn.absolutePosition += (octave + noteReturn.biasForOctave) *12;
-        noteReturn.absolutePosition += (octave + 2) *12;
+        noteReturn = new StdNote( (octave + 2 ) * 12 );
+        //noteReturn.absolutePosition += (octave ) *12;
         noteReturn.duration = duration;
         return noteReturn;
     }
