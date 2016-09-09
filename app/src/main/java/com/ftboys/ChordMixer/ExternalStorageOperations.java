@@ -3,7 +3,13 @@ package com.ftboys.ChordMixer;
 import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
+import android.util.Xml;
 
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
 import    java.text.SimpleDateFormat;
 
 import com.ftboys.ChordMixer.ChordMixerAlgorithm.*;
@@ -22,10 +28,11 @@ public class ExternalStorageOperations {
 
     private static final String TAG = "ExternalStorage";
 
-    final File MIDI_NOTE_FILE = new File(Environment.getExternalStoragePublicDirectory(
+   final File MIDI_NOTE_FILE = new File(Environment.getExternalStoragePublicDirectory(
             Environment.DIRECTORY_MUSIC) + "/MIDI_NOTES/");
-    final File MIDI_MUSIC_FILE = new File(Environment.getExternalStoragePublicDirectory(
+   final File MIDI_MUSIC_FILE = new File(Environment.getExternalStoragePublicDirectory(
             Environment.DIRECTORY_MUSIC) + "/MIDI_MUSIC/");
+
 
 
     Context context;
@@ -34,6 +41,23 @@ public class ExternalStorageOperations {
     public ExternalStorageOperations(Context context, OnNoteSavedToStorage noteSavedListener) {
         this.context = context;
         this.noteSavedListener = noteSavedListener;
+    }
+
+    public String readFileScore(String scoreName) throws IOException{
+        String score = "";
+        FileInputStream fin;
+        try {
+            fin = new FileInputStream(MIDI_MUSIC_FILE + scoreName + ".cdm");
+            InputStreamReader isr = new InputStreamReader(fin);
+            BufferedReader br = new BufferedReader(isr);
+            score = br.readLine();
+            fin.close();
+        }catch (IOException e) {
+            e.printStackTrace();
+            System.err.println(e);
+        }
+
+        return score;
     }
 
     public void createTestMusic() {
@@ -127,7 +151,7 @@ public class ExternalStorageOperations {
         //在存储上创建MIDI文件（*.mid）
         MidiFile newMidiNoteFile = new MidiFile(MidiFile.DEFAULT_RESOLUTION, tracks);
 
-        // File file = new File(ABSOLUTE_EXTERNAL_PATH, "note_c4.mid");
+        //File file = new File(ABSOLUTE_EXTERNAL_PATH, "note_c4.mid");
         //String pathToMidiNoteFile = MIDI_MUSIC_FILE + "/" +   "mynote.mid";
         final File output = new File(MIDI_MUSIC_FILE, "mynote.mid");
         try {
@@ -137,10 +161,23 @@ public class ExternalStorageOperations {
             System.err.println(e);
         }
 
+        //在存储上创建cdm文件（*.cdm）
+        final File outputcdm = new File(MIDI_MUSIC_FILE, "mynote" + ".cdm");
+        try {
+            FileOutputStream cmdFileOutStream = new FileOutputStream(outputcdm);
+            String testString = "This is a test String";
+            cmdFileOutStream.write(testString.getBytes());
+            cmdFileOutStream.flush();
+            cmdFileOutStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println(e);
+        }
+        Log.i(TAG, "createMidiMuiscInExternalStorage:" + "mynote" + ".cmd  create succcessfully!");
+
 
     }
-
-    public void createMidiMuiscInExternalStorage(StdScore stdScore){
+    public void createMidiMusicInExternalStorage(StdScore stdScore){
         //Edit your music
         MIDI_MUSIC_FILE.mkdirs(); // create folder if not exists
 
@@ -151,25 +188,16 @@ public class ExternalStorageOperations {
         timeSignature.setTimeSignature(4, 4, TimeSignature.DEFAULT_METER, TimeSignature.DEFAULT_DIVISION);
 
         Tempo tempo = new Tempo();
-        if(stdScore != null){
+        if (stdScore != null) {
             tempo.setBpm(stdScore.tempo);
-        }
-        else{
+        } else {
             tempo.setBpm(120);
 
         }
 
 
-
-
-
-
-
-
-
-
         //改变轨道音色  时间标记 轨道 音色
-        ProgramChange programChange = new ProgramChange(0, 0,0);
+        ProgramChange programChange = new ProgramChange(0, 0, 0);
 
         tempoTrack.insertEvent(timeSignature);
         tempoTrack.insertEvent(tempo);
@@ -178,9 +206,9 @@ public class ExternalStorageOperations {
         ArrayList<MidiTrack> tracks = new ArrayList<>();
         tracks.add(tempoTrack);
 
-        double perBeatTime_1_64 = 60000.0/(double)tempo.getBpm()/16;
-        if(stdScore != null){
-            for(int i=0;i<stdScore.musicTrack.size();i++) {
+        double perBeatTime_1_64 = 60000.0 / (double) tempo.getBpm() / 16;
+        if (stdScore != null) {
+            for (int i = 0; i < stdScore.musicTrack.size(); i++) {
                 //每插入一条轨道i++
                 MidiTrack tempMidiTrack = new MidiTrack();
                 ProgramChange tempProgramChange = new ProgramChange(0, i, stdScore.musicTrack.get(i).instrument);
@@ -191,18 +219,17 @@ public class ExternalStorageOperations {
                     //每插入一个音符 j++
 //                    int tempPitch = stdScore.musicTrack.get(i).noteTrack.get(j).pitch + 12 * stdScore.musicTrack.get(i).noteTrack.get(j).octave + 3;
                     int tempPitch = stdScore.musicTrack.get(i).noteTrack.get(j).absolutePosition;
-                    int thisDuration =(int) (perBeatTime_1_64 * Math.pow( 2,stdScore.musicTrack.get(i).noteTrack.get(j).duration-2));
+                    int thisDuration = (int) (perBeatTime_1_64 * Math.pow(2, stdScore.musicTrack.get(i).noteTrack.get(j).duration - 2));
                     //tempMidiTrack.insertNote(i,tempPitch,stdScore.getVolume(),tempDuration,thisDuration);
-                    tempMidiTrack.insertNote(i,tempPitch,stdScore.musicTrack.get(i).trackVolume,tempDuration,thisDuration);
-                    tempDuration += thisDuration ;
+                    tempMidiTrack.insertNote(i, tempPitch, stdScore.musicTrack.get(i).trackVolume, tempDuration, thisDuration);
+                    tempDuration += thisDuration;
                 }
                 //MIDI文件的一个轨道编辑结束 插入编辑好的轨道
                 tracks.add(tempMidiTrack);
-                Log.i(TAG,"stdScore.musicTrack["+i+"]add successfully" );
+                Log.i(TAG, "stdScore.musicTrack[" + i + "]add successfully");
             }
-        }
-        else{
-            Log.i(TAG,"stdNote Null References");
+        } else {
+            Log.i(TAG, "stdNote Null References");
         }
 
   /*
@@ -232,32 +259,41 @@ public class ExternalStorageOperations {
 */
 
 
-
         //在存储上创建MIDI文件（*.mid）
         MidiFile newMidiNoteFile = new MidiFile(MidiFile.DEFAULT_RESOLUTION, tracks);
 
         // File file = new File(ABSOLUTE_EXTERNAL_PATH, "note_c4.mid");
         String fileName;
-        if(stdScore.scoreName != null){
+        if (stdScore.scoreName != null) {
             fileName = stdScore.scoreName;
-        }
-        else{
+        } else {
             SimpleDateFormat sdf = new SimpleDateFormat("hh-mm-ss");
             fileName = sdf.format(new java.util.Date());
 
         }
         String pathToMidiNoteFile = MIDI_MUSIC_FILE + "/" + fileName + ".mid";
-        final File output = new File(MIDI_MUSIC_FILE,fileName + ".mid");
+        final File output = new File(MIDI_MUSIC_FILE, fileName + ".mid");
         try {
             newMidiNoteFile.writeToFile(output);
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             System.err.println(e);
         }
-        Log.i(TAG,"createMidiMuiscInExternalStorage:"+fileName + "  create succcessfully!");
+        Log.i(TAG, "createMidiMuiscInExternalStorage:" + fileName + ".mid  create succcessfully!");
 
+        //在存储上创建cdm文件（*.cdm）
+        final File outputcdm = new File(MIDI_MUSIC_FILE, fileName + ".cdm");
+        try {
+            FileOutputStream cmdFileOutStream = new FileOutputStream(outputcdm);
 
+            cmdFileOutStream.write(stdScore.scoreToFileString().getBytes());
+            cmdFileOutStream.flush();
+            cmdFileOutStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println(e);
+        }
+        Log.i(TAG, "createMidiMuiscInExternalStorage:" + fileName + ".cmd  create succcessfully!");
     }
 
     public void createMidiNoteInExternalStorage(String name,int noteMidiCode, int newInstrument) {
