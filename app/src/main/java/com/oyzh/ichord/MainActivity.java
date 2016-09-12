@@ -1,11 +1,9 @@
 package com.oyzh.ichord;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
-import android.media.Image;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Build;
@@ -28,7 +26,7 @@ import android.widget.*;
 
 import com.ftboys.ChordMixer.ChordMixerAlgorithm.*;
 import com.mp3player.ScanMusic;
-import com.pdrogfer.simplemidiplayer.R;
+import com.ftboys.ChordMixer.R;
 
 import com.ftboys.ChordMixer.*;
 
@@ -145,14 +143,14 @@ public class MainActivity extends AppCompatActivity
         mainScore.setVolume(volumeValue);
     }
     //改变速度
-    public void changeTempo(float tempoValue){
+    public void changeTempo(int tempoValue){
         mainScore.tempo = tempoValue;
     }
     //刷新显示inputTextView界面
     public void refreshInputTextMain(){
         String str = "";
         for(StdNote tmp : mainScore.musicTrack.get(0).noteTrack){
-            str += tmp.name + tmp.octave +  "  " ;
+            str += tmp.name + tmp.getOctave() +  "  " ;
         }
         inputTextMain.setText(str);
     }
@@ -229,6 +227,8 @@ public class MainActivity extends AppCompatActivity
                 StdNote addedNote = new StdNote(-1);
                 addedNote.duration = mainInputDuration;
                 mainScore.musicTrack.get(0).noteTrack.add(addedNote);
+
+                refreshInputTextMain();
                 //setMelody(addedNote.stdToStringNote());
             }
         });
@@ -316,7 +316,7 @@ public class MainActivity extends AppCompatActivity
 //                mainScore = mainPattent.scoreChordHandler(mainScore);
 //                String str = "";
 //                for(StdNote tmp : mainScore.musicTrack.get(1).noteTrack){
-//                    str += tmp.name + tmp.octave() + " ";
+//                    str += tmp.name + tmp.getOctave()() + " ";
 //                }
 //                textMainChord.setText(str);
 //            }
@@ -478,7 +478,7 @@ public class MainActivity extends AppCompatActivity
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             speedValue.setText(Integer.toString(progress));
             //这里写设置速度值的具体方法调用，progress为具体进度值，还没写
-            mainScore.tempo = (float) progress;
+            mainScore.tempo =  progress;
         }
 
         public void onStartTrackingTouch(SeekBar seekBar) {

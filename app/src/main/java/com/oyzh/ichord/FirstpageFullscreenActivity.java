@@ -9,8 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.ftboys.ChordMixer.*;
-import com.pdrogfer.simplemidiplayer.R;
+import com.ftboys.ChordMixer.R;
 
 import java.util.Timer;
 import java.util.TimerTask;

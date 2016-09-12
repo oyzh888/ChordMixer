@@ -7,23 +7,21 @@ package com.ftboys.ChordMixer.ChordMixerAlgorithm;
 public class StdNote {
 
 	/**
-	 * @param pitch 音高0-11
 	 * @param absolutePosition 绝对音高
 	 * @param duration 持续时长，2^n * k秒。6 为四分音符长度   6表示四分音符 5表示八分音符 2表示六十四分之音符
 	 * @param dot 是否有附点 1为有，0为没有
 	 * @param name 音符的名字CDEFGAB 可以加#b表示升降
 	 * @param barPoint 是否为小节末尾
-	 * @param octave 八度位置 3为中央C位置
 	 *
 	 *
 	 */
-	public int pitch;
+
 	public int absolutePosition;
 	public int duration;
 	public int dot;
 	public String name;
 	public int barPoint = 0;
-	public int octave = 0;
+
 	public int downFlatSharp = 1;
 
 	private int biasForOctave = 2;
@@ -38,8 +36,7 @@ public class StdNote {
 		this.dot = dot;
 		this.name = name;
 		absolutePosition = pitch + (octave + biasForOctave) * 12;
-		this.octave = getOctave();
-		this.pitch = getPitch();
+
 
 		if(name.length() > 1){
 			if(name.charAt(1) == '#') downFlatSharp++;
@@ -54,7 +51,7 @@ public class StdNote {
 
 		this(0,5,0,0,"C");
 		this.absolutePosition = absolutePosition;
-		pitch = absolutePosition % 12;
+		int pitch = getPitch();
 		String tmp = null;
 		switch(pitch)
 		{
@@ -72,8 +69,8 @@ public class StdNote {
 			case 11:tmp = "B"; break;
 			default:tmp = "Z"; break;
 		}
-		this.name = new String(tmp);
-		octave = getOctave();
+		this.name = tmp;
+
 	}
 
 
@@ -81,6 +78,7 @@ public class StdNote {
 	public StdNote(String name) {
 		this(60);
 		this.name = name;
+		int pitch = 0;
 		//根据pitch初始化name
 		switch(name.charAt(0))
 		{
@@ -99,7 +97,6 @@ public class StdNote {
 			else if(name.charAt(1) == 'b')pitch--;
 		}
 		absolutePosition += pitch;
-		pitch = getPitch();
 
 	}
 
@@ -115,14 +112,14 @@ public class StdNote {
 		this.duration = duration;
 		this.dot = dot;
 		this.barPoint = barPoint;
-		octave = getOctave();
+		//octave = getOctave();
 	}
 
-	private int getOctave(){
+	public int getOctave(){
 		return absolutePosition / 12 - biasForOctave;
 	}
 
-	private int getPitch(){
+	public int getPitch(){
 		return absolutePosition % 12;
 	}
 
@@ -130,16 +127,17 @@ public class StdNote {
 	public String description(){
 		String tmp = "pitch: "   + getPitch()				   				 + '\n'
 				   + "duration:" + duration 								 + '\n'
-				   + "octave:"   + octave							     + '\n'
+				   + "octave:"   + getOctave()							     + '\n'
 				   + "dot:"		 + dot 										 + '\n'
-				   + "name:"	 + name 	;
+				   + "name:"	 + name 									 + '\n'
+				   + "absPosition"+ absolutePosition;
 		return tmp;
 	}
 
 	//ToStringNote code
 	public String stdToStringNote(){
 		String str = "";
-		str +=  name + (octave+1) + 0 + (duration-2)  + " " ;
+		str +=  name + (getOctave()+1) + 0 + (duration-2)  + " " ;
 		//if(barPoint == 1) str += ',';
 		return str;
 	}
@@ -148,7 +146,7 @@ public class StdNote {
 	//  8位一个音，1音名；2八度；3升降＋－0；4音长；5附点1、0；6－8无意义的9占位；
 	public String stdTo8BitsStringNote(){
 		String str = "";
-		str +=  name + (octave) + 0 + (duration-2)  + " " ;
+		str +=  name + (getOctave()) + 0 + (duration-2)  + " " ;
 		//if(barPoint == 1) str += ',';
 		return str;
 	}

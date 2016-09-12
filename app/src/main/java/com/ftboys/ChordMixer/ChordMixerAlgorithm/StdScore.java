@@ -16,12 +16,9 @@ public class StdScore {
 
 	public int toneChenge = 0;
 
-	//ADD BY FJC
-	public int instrument[];
-
 	//乐曲其他信息
 	private int volume = 100;
-	public float tempo = 120;
+	public int tempo = 120;
 	public String scoreName = "UnKnown";
 	public String author = "UnKnown";
 
@@ -66,16 +63,18 @@ public class StdScore {
 		return volume;
 	}
 
+
+	//region encoder：
 	public String scoreToStringNotes(){
 		String str = "";
 		for(StdNote tNote : musicTrack.get(0).noteTrack){
-			str +=  tNote.name + tNote.octave + 0 + (tNote.duration-2)  + " " ;
+			str +=  tNote.name + tNote.getOctave() + 0 + (tNote.duration-2)  + " " ;
 			if(tNote.barPoint == 1) str += ',';
 		}
 		return str.trim();//去掉前后空格
 	}
 
-	//        088 0 5 1 00
+//        088 0 5 1 00
 //        100 1 6 1 00
 //
 //        name
@@ -83,13 +82,15 @@ public class StdScore {
 //
 //        08805100 08805100 08805100
 //        C Dm Em C4 Cadd
+	//0-2absoluteposition 3是否升降 4时长 5附点 6-7占位符 8分隔符
+
 	public String scoreTo8BitsStringNotes(){
 		String str = "", placeholder = "00",seperator = " ";
 		for(StdNote tNote : musicTrack.get(0).noteTrack){
 
 			str += String.format("%03d",tNote.absolutePosition)
 				+  tNote.downFlatSharp
-				+  tNote.octave
+				+  tNote.duration
 				+  tNote.dot
 				+  placeholder
 				+  seperator;
@@ -99,7 +100,6 @@ public class StdScore {
 		return str.trim();//去掉前后空格
 	}
 
-
 	public String scoreToChord(){
 		String str = "";
 		for(StdChord tChord : chordTrack){
@@ -108,13 +108,97 @@ public class StdScore {
 		return str.trim();//去掉了前后空格
 	}
 
+	//保留方法
+	public String scoreToHeadInfo(){
+		String str = "";
+		return str;
+	}
+
+	public String scoreToFileString(){
+		String str = "", seperator = "$";
+
+		//头信息
+		str += 	  author + seperator
+				+ scoreName + seperator
+				+ tempo + seperator
+				+ volume + seperator
+				+ toneChenge + seperator
+				+ musicTrack.size() + seperator
+				//主旋律信息和和弦信息
+				+ scoreTo8BitsStringNotes() + seperator
+				+ scoreToChord();
+		return str;
+	}
+	//endregion
+
+	//region decoder:
+
+	public StdScore fileToScore(String fileStr){
+		String seperator = "\\$", author, scoreName;
+		int tempo, volume, toneChange, musicTrackSize;
+
+		String[] splitedStr = fileStr.split(seperator);
+
+		author 		   = splitedStr[0];
+		scoreName      = splitedStr[1];
+		tempo		   = Integer.valueOf(splitedStr[2]);
+		volume 		   = Integer.valueOf(splitedStr[3]);
+		toneChange     = Integer.valueOf(splitedStr[4]);
+		musicTrackSize = Integer.valueOf(splitedStr[5]);
+
+		StdScore scoreRet = new StdScore();
+		//赋值头部信息
+		scoreRet.scoreName 	 = scoreName;
+		scoreRet.author	     = author;
+		scoreRet.tempo       = tempo;
+		scoreRet.volume      = volume;
+		scoreRet. toneChenge = toneChange;
+
+		scoreRet.musicTrack.clear();
+		for(int i = 0; i<musicTrackSize; i++)
+			scoreRet.musicTrack.add(new StdTrack());
+
+		String strArr[];
+		//加入主旋律
+		strArr = splitedStr[6].split(" ");
+		for(String tmpStr : strArr){
+			scoreRet.musicTrack.get(0).noteTrack.add( stringToNote(tmpStr) );
+		}
+		//加入和弦
+		strArr = splitedStr[7].split(" ");//chord的分隔符
+		for(String tmpStr : strArr){
+			scoreRet.chordTrack.add( stringToChord(tmpStr));
+		}
+		return scoreRet;
+	}
+
+	public StdChord stringToChord(String strChord){
+		return new StdChord((strChord));
+	}
+
+	public StdNote stringToNote(String strNote){
+
+//        08805100 08805100 08805100
+//        C Dm Em C4 Cadd
+		//0-2absoluteposition 3是否升降 4时长 5附点 6-7占位符 8分隔符
+		StdNote noteRet 	   = new StdNote(Integer.valueOf(strNote.substring(0,3)) );
+
+		noteRet.downFlatSharp  = strNote.charAt(3) - '0';
+		noteRet.duration       = strNote.charAt(4) - '0';
+		noteRet.dot  		   = strNote.charAt(5) - '0';
+
+
+		//System.out.println(noteRet.description());
+		return noteRet;
+	}
+	//endregion
 
 	public String description(){
 		String str = "";
 		str += "numOfTrarck = " + musicTrack.size() + "\n";
 		str += "MainMelody:\n";
 		for(StdNote tmp : musicTrack.get(0).noteTrack){
-			str += tmp.name + tmp.octave + tmp.duration + " ";
+			str += tmp.name + tmp.getOctave() + tmp.duration + " ";
 		}
 		str += "\n";
 		str += "ChordTrack:\n";

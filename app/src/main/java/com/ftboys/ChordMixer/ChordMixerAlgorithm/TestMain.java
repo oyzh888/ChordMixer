@@ -31,6 +31,8 @@ public class TestMain {
 		System.out.println(myScore.scoreToChord());
 		//建议所有的变量都要放到构造函数里面,无论是StdScore还是StdTrack,还是StdNote.确保信息完整
 
+		String str1 = "12345";
+		System.out.println(str1.substring(1,3));
 		/*
 		* To FJC
 		* 建议构造函数:
