@@ -44,6 +44,7 @@ public class TestMain {
 		//读出一个四分音符C音
 		//第一种方法
 		String noteName = myScore.musicTrack.get(0).noteTrack.get(0).name;
+		int dur = myScore.musicTrack.get(0).noteTrack.get(0).duration;
 		//这样取出来也可以
 		StdNote tempNote = myScore.musicTrack.get(0).noteTrack.get(0);
 		noteName = tempNote.name;
