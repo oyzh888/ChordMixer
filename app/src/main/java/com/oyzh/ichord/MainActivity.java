@@ -246,7 +246,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 refreshTextMainChord();
                 //setChord(mainScore.scoreToChord());
-                externalStorageOperations.createMidiMuiscInExternalStorage(mainScore);
+                //externalStorageOperations.createMidiMuiscInExternalStorage(mainScore);
                 playWholeMusic(mainScore.scoreName);
 
             }
@@ -272,19 +272,19 @@ public class MainActivity extends AppCompatActivity
         });
 
         //临时测试按钮------------------------!!!!
-        findViewById(R.id.testButton1).setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                chordMixerScoreHandle();//获取和弦
-
-                for(int i=1; i<mainScore.musicTrack.size(); i++){
-                    mainScore.musicTrack.get(i).trackVolume = 30;
-                }
-
-                externalStorageOperations.createMidiMuiscInExternalStorage(mainScore);
-
-            }
-        });
+//        findViewById(R.id.testButton1).setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick(View view) {
+//                chordMixerScoreHandle();//获取和弦
+//
+//                for(int i=1; i<mainScore.musicTrack.size(); i++){
+//                    mainScore.musicTrack.get(i).trackVolume = 30;
+//                }
+//
+//                externalStorageOperations.createMidiMuiscInExternalStorage(mainScore);
+//
+//            }
+//        });
 
 
         findViewById(R.id.testButton2).setOnClickListener(new View.OnClickListener(){

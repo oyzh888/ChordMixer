@@ -18,21 +18,39 @@ public class TestMain {
 		StdNote myNote = new StdNote(60,6,0,0);//一个四分音符,中央C,没浮点,不是小节末.
 		//取出第一轨道写入一个音符
 		myScore.musicTrack.get(0).noteTrack.add(  myNote );
+		//写入一堆音符
+		for(int i=0; i<10; i++)myScore.musicTrack.get(0).noteTrack.add(  myNote );
 		//读出第一轨的音符
 		myNote = myScore.musicTrack.get(0).noteTrack.get(0);
 		//写入第一条伴奏轨
 		myScore.musicTrack.get(1).noteTrack.add(myNote);
-
-		System.out.println(myScore.description());
-
+		//调用算法
 		myScore = myC.scoreHandler(myScore);
 
-		System.out.println(myScore.scoreToStringNotes());
-		System.out.println(myScore.scoreToChord());
-		//建议所有的变量都要放到构造函数里面,无论是StdScore还是StdTrack,还是StdNote.确保信息完整
+		//打印主旋律音符midi音高和时长
+		for (StdNote tmpNote: myScore.musicTrack.get(0).noteTrack) {
+			System.out.println(tmpNote.absolutePosition + " " + tmpNote.duration );
 
-		String str1 = "12345";
-		System.out.println(str1.substring(1,3));
+		}
+		//打印和弦
+		for (StdChord tmpChord: myScore.chordTrack) {
+			System.out.println(tmpChord.chordName);
+
+		}
+
+		//曲谱信息打印函数
+		System.out.println(myScore.description());
+
+
+
+
+
+
+//		System.out.println(myScore.scoreToStringNotes());
+//		System.out.println(myScore.scoreToChord());
+//		//建议所有的变量都要放到构造函数里面,无论是StdScore还是StdTrack,还是StdNote.确保信息完整
+//
+
 		/*
 		* To FJC
 		* 建议构造函数:
