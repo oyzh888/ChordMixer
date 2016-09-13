@@ -41,6 +41,17 @@ public class TestMain {
 		//曲谱信息打印函数
 		System.out.println(myScore.description());
 
+		//读出一个四分音符C音
+		//第一种方法
+		String noteName = myScore.musicTrack.get(0).noteTrack.get(0).name;
+		//这样取出来也可以
+		StdNote tempNote = myScore.musicTrack.get(0).noteTrack.get(0);
+		noteName = tempNote.name;
+
+		//读出一个C和弦
+		String nameOfChord = myScore.chordTrack.get(0).chordName;
+
+
 
 
 
